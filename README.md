@@ -72,15 +72,17 @@ npm test
 
 ## Ramas y despliegue
 
-- `desarrollo`: rama de trabajo.
-- `main`: rama validada y de producción (la que despliega Vercel).
+- `main`: única rama del repositorio y rama de producción en Vercel.
+
+Para trabajar con una rama de desarrollo y pasarla luego a `main` (flujo recomendado
+en clase):
 
 ```bash
-git checkout desarrollo
-git merge main          # o al revés, según el flujo
+git checkout -b desarrollo      # rama de trabajo
+# ... cambios y commits ...
 git checkout main
 git merge desarrollo
-git push origin main
+git push origin main            # esto despliega en producción
 ```
 
 Producción: <https://dam2-productos-eight.vercel.app/productos>
