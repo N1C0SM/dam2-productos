@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   IonHeader,
   IonToolbar,
@@ -8,8 +8,6 @@ import {
   IonButtons,
 } from '@ionic/angular';
 import { RouterLink } from '@angular/router';
-
-import { ThemeToggleComponent } from '../../components/theme-toggle/theme-toggle.component';
 
 @Component({
   selector: 'app-inicio',
@@ -24,7 +22,20 @@ import { ThemeToggleComponent } from '../../components/theme-toggle/theme-toggle
     IonButton,
     IonButtons,
     RouterLink,
-    ThemeToggleComponent,
   ],
 })
-export class InicioPage {}
+export class InicioPage implements OnInit {
+  oscuro = localStorage.getItem('modo') === 'oscuro';
+
+  ngOnInit(): void {
+    if (this.oscuro) {
+      document.documentElement.classList.add('ion-palette-dark');
+    }
+  }
+
+  cambiarTema(): void {
+    this.oscuro = !this.oscuro;
+    document.documentElement.classList.toggle('ion-palette-dark', this.oscuro);
+    localStorage.setItem('modo', this.oscuro ? 'oscuro' : 'claro');
+  }
+}

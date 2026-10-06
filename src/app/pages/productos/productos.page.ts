@@ -1,4 +1,4 @@
-import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import {
@@ -12,20 +12,14 @@ import {
   IonCard,
   IonCardHeader,
   IonCardTitle,
+  IonCardSubtitle,
   IonCardContent,
   IonButton,
-  IonSegment,
-  IonSegmentButton,
-  IonLabel,
   IonFooter,
 } from '@ionic/angular';
 
-import { Product, ProductsResponse, valorStock } from '../../models/product.model';
+import { Product, ProductsResponse } from '../../models/product.model';
 import { ProductService } from '../../services/product.service';
-import { ProductoCardComponent } from '../../components/producto-card/producto-card.component';
-import { ThemeToggleComponent } from '../../components/theme-toggle/theme-toggle.component';
-
-const PRODUCTOS_POR_PAGINA = 10;
 
 @Component({
   selector: 'app-productos',
@@ -35,8 +29,6 @@ const PRODUCTOS_POR_PAGINA = 10;
   imports: [
     CurrencyPipe,
     RouterLink,
-    ProductoCardComponent,
-    ThemeToggleComponent,
     IonHeader,
     IonToolbar,
     IonTitle,
@@ -47,89 +39,94 @@ const PRODUCTOS_POR_PAGINA = 10;
     IonCard,
     IonCardHeader,
     IonCardTitle,
+    IonCardSubtitle,
     IonCardContent,
     IonButton,
-    IonSegment,
-    IonSegmentButton,
-    IonLabel,
     IonFooter,
   ],
 })
 export class ProductosPage implements OnInit {
   private productService = inject(ProductService);
 
-  // Angular 22 arranca sin zone.js: usamos signals para que la vista
-  // se actualice cuando llega la respuesta de la API.
-  products = signal<Product[]>([]);
-  total = signal(0);
-  loading = signal(false);
+  // Uso signal porque si no, la pagina no se actualiza al llegar los datos
+  productos = signal<Product[]>([]);
+  cargando = signal(false);
   error = signal('');
-  page = signal(1);
+  total = signal(0);
 
-  /** Cómo se muestran los productos: en tabla o en tarjetas (dashboard). */
-  vista = signal<'tarjetas' | 'tabla'>('tabla');
+  pagina = 1;
+  porPagina = 10;
 
-  readonly pageSize = PRODUCTOS_POR_PAGINA;
-
-  /** Función pura del modelo, expuesta para la tabla. */
-  valorStock = valorStock;
-
-  /** Datos del resumen de arriba del dashboard. */
-  valorInventario = computed(() =>
-    this.products().reduce((suma, p) => suma + valorStock(p), 0),
-  );
-
-  valoracionMedia = computed(() => {
-    const lista = this.products();
-    if (lista.length === 0) {
-      return 0;
-    }
-    return lista.reduce((suma, p) => suma + p.rating, 0) / lista.length;
-  });
-
-  get totalPaginas(): number {
-    return Math.max(1, Math.ceil(this.total() / this.pageSize));
-  }
+  verTarjetas = false;
+  oscuro = localStorage.getItem('modo') === 'oscuro';
 
   ngOnInit(): void {
-    this.loadProducts();
+    this.cargarProductos();
   }
 
-  loadProducts(): void {
-    this.loading.set(true);
+  cargarProductos(): void {
+    this.cargando.set(true);
     this.error.set('');
 
-    const skip = (this.page() - 1) * this.pageSize;
+    const saltar = (this.pagina - 1) * this.porPagina;
 
-    this.productService.getProducts(this.pageSize, skip).subscribe({
-      next: (response: ProductsResponse) => {
-        this.products.set(response.products);
-        this.total.set(response.total);
-        this.loading.set(false);
+    this.productService.getProducts(this.porPagina, saltar).subscribe({
+      next: (respuesta: ProductsResponse) => {
+        this.productos.set(respuesta.products);
+        this.total.set(respuesta.total);
+        this.cargando.set(false);
       },
-      error: (error) => {
-        console.error(error);
+      error: (fallo) => {
+        console.log(fallo);
         this.error.set('No se han podido cargar los productos.');
-        this.loading.set(false);
+        this.cargando.set(false);
       },
     });
   }
 
-  cambiarVista(vista: string): void {
-    this.vista.set(vista === 'tabla' ? 'tabla' : 'tarjetas');
+  totalPaginas(): number {
+    return Math.ceil(this.total() / this.porPagina);
   }
 
   paginaAnterior(): void {
-    if (this.page() > 1) {
-      this.page.update((p) => p - 1);
-      this.loadProducts();
-    }
+    this.pagina = this.pagina - 1;
+    this.cargarProductos();
   }
 
   paginaSiguiente(): void {
-    if (this.page() < this.totalPaginas) {
-      this.page.update((p) => p + 1);
-      this.loadProducts();
+    this.pagina = this.pagina + 1;
+    this.cargarProductos();
+  }
+
+  // Cuenta que pidio el cliente: unidades x precio menos el descuento
+  stockValorado(product: Product): number {
+    const descuento = product.price * (product.discountPercentage / 100);
+    return product.stock * (product.price - descuento);
+  }
+
+  valorDelStock(): number {
+    let total = 0;
+    for (const product of this.productos()) {
+      total = total + this.stockValorado(product);
     }
+    return total;
+  }
+
+  valoracionMedia(): number {
+    const lista = this.productos();
+    if (lista.length === 0) {
+      return 0;
+    }
+    let suma = 0;
+    for (const product of lista) {
+      suma = suma + product.rating;
+    }
+    return suma / lista.length;
+  }
+
+  cambiarTema(): void {
+    this.oscuro = !this.oscuro;
+    document.documentElement.classList.toggle('ion-palette-dark', this.oscuro);
+    localStorage.setItem('modo', this.oscuro ? 'oscuro' : 'claro');
   }
 }

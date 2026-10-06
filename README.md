@@ -10,7 +10,7 @@ y muestra los productos en una tabla paginada.
 | Ruta | Descripción |
 |---|---|
 | `/inicio` | Pantalla inicial: ir a productos |
-| `/productos` | Productos paginados (10 por página): vista **tabla** o **tarjetas** |
+| `/productos` | Productos paginados (10 por página): **tabla** o **tarjetas** |
 
 - `/` redirige a `/inicio`
 - Cualquier ruta desconocida redirige a `/inicio`
@@ -32,10 +32,10 @@ stock valorado = unidades × (precio − descuento aplicable)
 - Estados de **carga**, **éxito** y **error**, con botón de **reintentar**.
 - **Paginación** contra la propia API (`limit` y `skip`): 194 productos en 20 páginas.
 - Navegación Inicio → Productos → Inicio (botones y `ion-back-button`).
-- **Modo oscuro**: botón en la barra superior de las tres páginas; el tema se guarda
-  en `localStorage`.
-- **Dashboard de tarjetas** (reto): los productos se pueden ver en tarjetas con su
-  precio, stock, dimensiones y stock valorado, además de la tabla clásica.
+- **Modo oscuro**: botón "Modo oscuro / Modo claro" en la barra superior. Añade la
+  clase `ion-palette-dark` al `<html>` y se guarda en `localStorage`.
+- **Tarjetas** (reto): con el botón "Ver tarjetas" los productos se muestran como
+  tarjetas con su precio, stock, medidas y stock valorado, en vez de la tabla.
 - Resumen arriba de la página: productos mostrados, **valor del stock** y **valoración media**.
 
 ## Estructura
@@ -44,9 +44,6 @@ stock valorado = unidades × (precio − descuento aplicable)
 src/app/
 ├── models/product.model.ts       # Product, ProductsResponse y valorStock()
 ├── services/product.service.ts   # getProducts(limit, skip) con inject(HttpClient)
-├── services/theme.service.ts     # modo claro/oscuro con signal + localStorage
-├── components/producto-card/     # tarjeta de producto (dashboard)
-├── components/theme-toggle/      # botón de modo oscuro
 ├── pages/inicio/inicio.page.ts
 ├── pages/productos/productos.page.ts
 ├── pages/about/about.page.ts
