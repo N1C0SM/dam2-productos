@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/inicio"></ion-back-button>
+    </ion-buttons>
+    <ion-title>About</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cambiarTema()">
+        {{ oscuro ? 'Modo claro' : 'Modo oscuro' }}
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <h1>Sobre el proyecto</h1>
+
+  <p>
+    Esta aplicacion la he hecho para la actividad de Ionic + Angular Standalone del modulo
+    de Desarrollo de Interfaces (DAM2). Consume la API publica
+    https://dummyjson.com/products y muestra los productos en una tabla y en tarjetas.
+  </p>
+
+  <p>
+    Esta hecha con Ionic y Angular en modo Standalone, sin app.module.ts, y desplegada en
+    Vercel con despliegue automatico desde GitHub.
+  </p>
+
+  <h2>Mi perfil de GitHub</h2>
+
+  <ion-button href="https://github.com/N1C0SM" target="_blank">
+    Ver mi perfil de GitHub
+  </ion-button>
+
+  <ion-button routerLink="/inicio" fill="outline">Volver a inicio</ion-button>
+</ion-content>
