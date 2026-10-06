@@ -1,0 +1,66 @@
+.card {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.imagen {
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  background: var(--ion-color-light);
+}
+
+.imagen img {
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.titulo {
+  font-size: 15px;
+  font-weight: bold;
+  margin: 0 0 4px;
+  min-height: 40px;
+}
+
+.marca {
+  color: var(--ion-color-medium);
+  font-size: 13px;
+  margin: 0 0 6px;
+}
+
+.precio {
+  font-size: 20px;
+  font-weight: bold;
+  color: var(--ion-color-primary);
+  margin: 12px 0 8px;
+}
+
+.descuento {
+  font-size: 12px;
+  font-weight: normal;
+  color: var(--ion-color-success);
+  margin-left: 6px;
+}
+
+.datos {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 13px;
+}
+
+.datos li {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+  border-top: 1px solid rgba(128, 128, 128, 0.25);
+}
+
+.datos span {
+  color: var(--ion-color-medium);
+}

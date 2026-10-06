@@ -10,6 +10,8 @@ import {
   IonButton,
 } from '@ionic/angular';
 
+import { ThemeToggleComponent } from '../../components/theme-toggle/theme-toggle.component';
+
 @Component({
   selector: 'app-about',
   templateUrl: './about.page.html',
@@ -24,9 +26,9 @@ import {
     IonButtons,
     IonBackButton,
     IonButton,
+    ThemeToggleComponent,
   ],
 })
 export class AboutPage {
-  readonly empresa = 'DAM2 Productos S.L.';
   readonly github = 'https://github.com/N1C0SM';
 }

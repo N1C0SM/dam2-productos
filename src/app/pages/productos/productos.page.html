@@ -4,6 +4,9 @@
       <ion-back-button defaultHref="/inicio"></ion-back-button>
     </ion-buttons>
     <ion-title>Productos</ion-title>
+    <ion-buttons slot="end">
+      <app-theme-toggle></app-theme-toggle>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -36,68 +39,121 @@
       de {{ total() }}
     </p>
 
-    <div class="table-container">
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Producto</th>
-            <th>Categoría</th>
-            <th>Marca</th>
-            <th>Precio</th>
-            <th>Valoración</th>
-            <th>Stock</th>
-            <th>Dimensiones (ancho x alto)</th>
-            <th>Stock valorado</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (product of products(); track product.id) {
+    <!-- Resumen del dashboard -->
+    <div class="resumen">
+      <ion-card>
+        <ion-card-content>
+          <span class="etiqueta">En esta página</span>
+          <strong>{{ products().length }}</strong>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card>
+        <ion-card-content>
+          <span class="etiqueta">Valor del stock</span>
+          <strong>{{ valorInventario() | currency: 'EUR' }}</strong>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card>
+        <ion-card-content>
+          <span class="etiqueta">Valoración media</span>
+          <strong>⭐ {{ valoracionMedia().toFixed(2) }}</strong>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <ion-segment
+      class="selector"
+      [value]="vista()"
+      (ionChange)="cambiarVista($any($event).detail.value)"
+    >
+      <ion-segment-button value="tabla">
+        <ion-label>Tabla</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="tarjetas">
+        <ion-label>Tarjetas</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+
+    @if (vista() === 'tabla') {
+      <div class="table-container">
+        <table>
+          <thead>
             <tr>
-              <td>{{ product.id }}</td>
-              <td>
-                <div class="product">
-                  <img [src]="product.thumbnail" [alt]="product.title" />
-                  <span>{{ product.title }}</span>
-                </div>
-              </td>
-              <td>{{ product.category }}</td>
-              <td>{{ product.brand || 'Sin marca' }}</td>
-              <td>{{ product.price | currency: 'EUR' }}</td>
-              <td>⭐ {{ product.rating }}</td>
-              <td>{{ product.stock }}</td>
-              <td>
-                {{ product.dimensions.width }} x {{ product.dimensions.height }}
-              </td>
-              <td>{{ valorStock(product) | currency: 'EUR' }}</td>
+              <th>ID</th>
+              <th>Producto</th>
+              <th>Categoría</th>
+              <th>Marca</th>
+              <th>Precio</th>
+              <th>Valoración</th>
+              <th>Stock</th>
+              <th>Dimensiones (ancho x alto)</th>
+              <th>Stock valorado</th>
             </tr>
-          }
-        </tbody>
-      </table>
-    </div>
+          </thead>
+          <tbody>
+            @for (product of products(); track product.id) {
+              <tr>
+                <td>{{ product.id }}</td>
+                <td>
+                  <div class="product">
+                    <img [src]="product.thumbnail" [alt]="product.title" />
+                    <span>{{ product.title }}</span>
+                  </div>
+                </td>
+                <td>{{ product.category }}</td>
+                <td>{{ product.brand || 'Sin marca' }}</td>
+                <td>{{ product.price | currency: 'EUR' }}</td>
+                <td>⭐ {{ product.rating }}</td>
+                <td>{{ product.stock }}</td>
+                <td>
+                  {{ product.dimensions.width }} x {{ product.dimensions.height }}
+                </td>
+                <td>{{ valorStock(product) | currency: 'EUR' }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
 
-    <div class="paginacion">
-      <ion-button
-        fill="outline"
-        [disabled]="page() === 1"
-        (click)="paginaAnterior()"
-      >
-        Anterior
-      </ion-button>
-
-      <span>Página {{ page() }} de {{ totalPaginas }}</span>
-
-      <ion-button
-        fill="outline"
-        [disabled]="page() === totalPaginas"
-        (click)="paginaSiguiente()"
-      >
-        Siguiente
-      </ion-button>
-    </div>
+    @if (vista() === 'tarjetas') {
+      <div class="tarjetas">
+        @for (product of products(); track product.id) {
+          <app-producto-card [product]="product"></app-producto-card>
+        }
+      </div>
+    }
 
     <ion-button routerLink="/inicio" expand="block" class="volver">
       Volver a inicio
     </ion-button>
   }
 </ion-content>
+
+@if (!loading() && !error()) {
+  <ion-footer>
+    <ion-toolbar>
+      <div class="paginacion">
+        <ion-button
+          fill="outline"
+          [disabled]="page() === 1"
+          (click)="paginaAnterior()"
+        >
+          Anterior
+        </ion-button>
+
+        <span>Página {{ page() }} de {{ totalPaginas }}</span>
+
+        <ion-button
+          fill="outline"
+          [disabled]="page() === totalPaginas"
+          (click)="paginaSiguiente()"
+        >
+          Siguiente
+        </ion-button>
+      </div>
+    </ion-toolbar>
+  </ion-footer>
+}

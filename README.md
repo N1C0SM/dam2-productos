@@ -10,8 +10,8 @@ y muestra los productos en una tabla paginada.
 | Ruta | Descripción |
 |---|---|
 | `/inicio` | Pantalla inicial: ir a productos o a la página About |
-| `/productos` | Tabla paginada de productos (10 por página) |
-| `/about` | Reseña de la empresa y enlace al perfil de GitHub |
+| `/productos` | Productos paginados (10 por página): vista **tabla** o **tarjetas** |
+| `/about` | Descripción del proyecto y enlace al perfil de GitHub |
 
 - `/` redirige a `/inicio`
 - Cualquier ruta desconocida redirige a `/inicio`
@@ -33,7 +33,12 @@ stock valorado = unidades × (precio − descuento aplicable)
 - Estados de **carga**, **éxito** y **error**, con botón de **reintentar**.
 - **Paginación** contra la propia API (`limit` y `skip`): 194 productos en 20 páginas.
 - Navegación Inicio → Productos → Inicio (botones y `ion-back-button`).
-- Página **About** con la reseña de la empresa y enlace a GitHub.
+- Página **About** con la descripción del proyecto y enlace a GitHub.
+- **Modo oscuro**: botón en la barra superior de las tres páginas; el tema se guarda
+  en `localStorage`.
+- **Dashboard de tarjetas** (reto): los productos se pueden ver en tarjetas con su
+  precio, stock, dimensiones y stock valorado, además de la tabla clásica.
+- Resumen arriba de la página: productos mostrados, **valor del stock** y **valoración media**.
 
 ## Estructura
 
@@ -41,6 +46,9 @@ stock valorado = unidades × (precio − descuento aplicable)
 src/app/
 ├── models/product.model.ts       # Product, ProductsResponse y valorStock()
 ├── services/product.service.ts   # getProducts(limit, skip) con inject(HttpClient)
+├── services/theme.service.ts     # modo claro/oscuro con signal + localStorage
+├── components/producto-card/     # tarjeta de producto (dashboard)
+├── components/theme-toggle/      # botón de modo oscuro
 ├── pages/inicio/inicio.page.ts
 ├── pages/productos/productos.page.ts
 ├── pages/about/about.page.ts
