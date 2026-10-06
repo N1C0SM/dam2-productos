@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import {
   IonHeader,
   IonToolbar,
@@ -26,18 +26,11 @@ import { RouterLink } from '@angular/router';
     RouterLink,
   ],
 })
-export class AboutPage implements OnInit {
-  oscuro = localStorage.getItem('modo') === 'oscuro';
-
-  ngOnInit(): void {
-    if (this.oscuro) {
-      document.documentElement.classList.add('ion-palette-dark');
-    }
-  }
+export class AboutPage {
+  oscuro = false;
 
   cambiarTema(): void {
     this.oscuro = !this.oscuro;
     document.documentElement.classList.toggle('ion-palette-dark', this.oscuro);
-    localStorage.setItem('modo', this.oscuro ? 'oscuro' : 'claro');
   }
 }

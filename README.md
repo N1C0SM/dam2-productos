@@ -33,10 +33,9 @@ stock valorado = unidades × (precio − descuento aplicable)
 - **Paginación** contra la propia API (`limit` y `skip`): 194 productos en 20 páginas.
 - Navegación Inicio → Productos → Inicio (botones y `ion-back-button`).
 - **Modo oscuro**: botón "Modo oscuro / Modo claro" en la barra superior. Añade la
-  clase `ion-palette-dark` al `<html>` y se guarda en `localStorage`.
+  clase `ion-palette-dark` al `<html>`.
 - **Tarjetas** (reto): con el botón "Ver tarjetas" los productos se muestran como
   tarjetas con su precio, stock, medidas y stock valorado, en vez de la tabla.
-- Resumen arriba de la página: productos mostrados, **valor del stock** y **valoración media**.
 
 ## Estructura
 

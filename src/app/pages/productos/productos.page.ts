@@ -58,7 +58,7 @@ export class ProductosPage implements OnInit {
   porPagina = 10;
 
   verTarjetas = false;
-  oscuro = localStorage.getItem('modo') === 'oscuro';
+  oscuro = false;
 
   ngOnInit(): void {
     this.cargarProductos();
@@ -104,29 +104,8 @@ export class ProductosPage implements OnInit {
     return product.stock * (product.price - descuento);
   }
 
-  valorDelStock(): number {
-    let total = 0;
-    for (const product of this.productos()) {
-      total = total + this.stockValorado(product);
-    }
-    return total;
-  }
-
-  valoracionMedia(): number {
-    const lista = this.productos();
-    if (lista.length === 0) {
-      return 0;
-    }
-    let suma = 0;
-    for (const product of lista) {
-      suma = suma + product.rating;
-    }
-    return suma / lista.length;
-  }
-
   cambiarTema(): void {
     this.oscuro = !this.oscuro;
     document.documentElement.classList.toggle('ion-palette-dark', this.oscuro);
-    localStorage.setItem('modo', this.oscuro ? 'oscuro' : 'claro');
   }
 }

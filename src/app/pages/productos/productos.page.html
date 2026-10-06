@@ -37,27 +37,6 @@
   @if (!cargando() && !error()) {
     <p>Productos cargados: {{ productos().length }} de {{ total() }}</p>
 
-    <div class="resumen">
-      <ion-card>
-        <ion-card-content>
-          <p>En esta pagina</p>
-          <h2>{{ productos().length }}</h2>
-        </ion-card-content>
-      </ion-card>
-      <ion-card>
-        <ion-card-content>
-          <p>Valor del stock</p>
-          <h2>{{ valorDelStock() | currency: 'EUR' }}</h2>
-        </ion-card-content>
-      </ion-card>
-      <ion-card>
-        <ion-card-content>
-          <p>Valoracion media</p>
-          <h2>{{ valoracionMedia().toFixed(2) }}</h2>
-        </ion-card-content>
-      </ion-card>
-    </div>
-
     <div class="botones-vista">
       <ion-button (click)="verTarjetas = false">Ver tabla</ion-button>
       <ion-button (click)="verTarjetas = true">Ver tarjetas</ion-button>
