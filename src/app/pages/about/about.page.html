@@ -1,0 +1,37 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/inicio"></ion-back-button>
+    </ion-buttons>
+    <ion-title>About</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <h1>{{ empresa }}</h1>
+
+  <p>
+    {{ empresa }} es una empresa dedicada al desarrollo de interfaces web y
+    aplicaciones móviles. Nacimos como proyecto de aula del ciclo DAM2 y hoy
+    trabajamos en productos digitales centrados en el usuario.
+  </p>
+
+  <p>
+    Nuestro equipo diseña aplicaciones híbridas con Ionic y Angular, consume
+    APIs REST y publica cada versión con integración continua en Vercel. Nos
+    obsesionan tres cosas: que la interfaz sea clara, que el código esté
+    separado por capas y que el despliegue no dependa de nadie.
+  </p>
+
+  <h2>Proyecto</h2>
+  <p>
+    Este catálogo consume <strong>https://dummyjson.com/products</strong> y
+    muestra los productos con su precio, dimensiones y stock valorado.
+  </p>
+
+  <ion-button [attr.href]="github" target="_blank" rel="noopener">
+    Ver perfil de GitHub
+  </ion-button>
+
+  <ion-button routerLink="/inicio" fill="outline">Volver a inicio</ion-button>
+</ion-content>

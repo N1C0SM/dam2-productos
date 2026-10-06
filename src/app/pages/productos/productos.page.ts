@@ -1,5 +1,6 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import {
   IonHeader,
   IonToolbar,
@@ -15,8 +16,10 @@ import {
   IonButton,
 } from '@ionic/angular';
 
-import { Product, ProductsResponse } from '../../models/product.model';
+import { Product, ProductsResponse, valorStock } from '../../models/product.model';
 import { ProductService } from '../../services/product.service';
+
+const PRODUCTOS_POR_PAGINA = 10;
 
 @Component({
   selector: 'app-productos',
@@ -25,6 +28,7 @@ import { ProductService } from '../../services/product.service';
   standalone: true,
   imports: [
     CurrencyPipe,
+    RouterLink,
     IonHeader,
     IonToolbar,
     IonTitle,
@@ -48,6 +52,16 @@ export class ProductosPage implements OnInit {
   total = signal(0);
   loading = signal(false);
   error = signal('');
+  page = signal(1);
+
+  readonly pageSize = PRODUCTOS_POR_PAGINA;
+
+  /** Función pura del modelo, expuesta para usarla en la plantilla. */
+  valorStock = valorStock;
+
+  get totalPaginas(): number {
+    return Math.max(1, Math.ceil(this.total() / this.pageSize));
+  }
 
   ngOnInit(): void {
     this.loadProducts();
@@ -57,7 +71,9 @@ export class ProductosPage implements OnInit {
     this.loading.set(true);
     this.error.set('');
 
-    this.productService.getProducts().subscribe({
+    const skip = (this.page() - 1) * this.pageSize;
+
+    this.productService.getProducts(this.pageSize, skip).subscribe({
       next: (response: ProductsResponse) => {
         this.products.set(response.products);
         this.total.set(response.total);
@@ -69,5 +85,19 @@ export class ProductosPage implements OnInit {
         this.loading.set(false);
       },
     });
+  }
+
+  paginaAnterior(): void {
+    if (this.page() > 1) {
+      this.page.update((p) => p - 1);
+      this.loadProducts();
+    }
+  }
+
+  paginaSiguiente(): void {
+    if (this.page() < this.totalPaginas) {
+      this.page.update((p) => p + 1);
+      this.loadProducts();
+    }
   }
 }

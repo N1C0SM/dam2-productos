@@ -2,27 +2,48 @@
 
 Actividad guiada — **Ionic + Angular Standalone: consumo de API REST** (DAM2 – Desarrollo de Interfaces).
 
-Aplicación Ionic con Angular Standalone que consume `https://dummyjson.com/products`,
-muestra los productos en una tabla y navega entre dos vistas.
+Aplicación Ionic con Angular Standalone que consume `https://dummyjson.com/products`
+y muestra los productos en una tabla paginada.
 
 ## Vistas
 
 | Ruta | Descripción |
 |---|---|
-| `/inicio` | Pantalla inicial con botón para ir a productos |
-| `/productos` | Tabla con ID, producto (con imagen), categoría, marca, precio, valoración y stock |
+| `/inicio` | Pantalla inicial: ir a productos o a la página About |
+| `/productos` | Tabla paginada de productos (10 por página) |
+| `/about` | Reseña de la empresa y enlace al perfil de GitHub |
 
 - `/` redirige a `/inicio`
 - Cualquier ruta desconocida redirige a `/inicio`
+
+## Columnas de la tabla
+
+ID, producto (con imagen), categoría, marca, precio, valoración, stock,
+**dimensiones (ancho × alto)** y **stock valorado**.
+
+El stock valorado se calcula con una función pura del modelo:
+
+```
+stock valorado = unidades × (precio − descuento aplicable)
+```
+
+## Funcionalidades
+
+- Consumo de la API REST con `HttpClient` y `provideHttpClient()`.
+- Estados de **carga**, **éxito** y **error**, con botón de **reintentar**.
+- **Paginación** contra la propia API (`limit` y `skip`): 194 productos en 20 páginas.
+- Navegación Inicio → Productos → Inicio (botones y `ion-back-button`).
+- Página **About** con la reseña de la empresa y enlace a GitHub.
 
 ## Estructura
 
 ```
 src/app/
-├── models/product.model.ts       # Product y ProductsResponse
-├── services/product.service.ts   # getProducts() con inject(HttpClient)
+├── models/product.model.ts       # Product, ProductsResponse y valorStock()
+├── services/product.service.ts   # getProducts(limit, skip) con inject(HttpClient)
 ├── pages/inicio/inicio.page.ts
 ├── pages/productos/productos.page.ts
+├── pages/about/about.page.ts
 ├── app.component.ts
 ├── app.routes.ts                 # carga perezosa con loadComponent
 └── app.config.ts                 # provideHttpClient(), provideRouter(), Ionic
@@ -34,6 +55,8 @@ src/app/
 - Cada componente declara sus propios `imports`.
 - `HttpClient` se proporciona con `provideHttpClient()` en `app.config.ts`.
 - Se usa `inject(HttpClient)` en lugar del constructor.
+- Angular 22 arranca **sin zone.js**, por lo que el estado de las páginas se
+  gestiona con `signal()` para que la vista se actualice al llegar la respuesta.
 
 ## Ejecutar
 
@@ -41,9 +64,21 @@ src/app/
 npm install
 npm start        # http://localhost:8100
 npm run build    # genera www/
+npm run lint
+npm test
 ```
 
-## Producción
+## Ramas y despliegue
 
-Desplegado en Vercel desde la rama `desarrollo`:
-<https://dam2-productos-eight.vercel.app/productos>
+- `desarrollo`: rama de trabajo.
+- `main`: rama validada y de producción (la que despliega Vercel).
+
+```bash
+git checkout desarrollo
+git merge main          # o al revés, según el flujo
+git checkout main
+git merge desarrollo
+git push origin main
+```
+
+Producción: <https://dam2-productos-eight.vercel.app/productos>

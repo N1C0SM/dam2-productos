@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { ProductsResponse } from '../models/product.model';
@@ -12,7 +12,15 @@ export class ProductService {
 
   private apiUrl = 'https://dummyjson.com/products';
 
-  getProducts(): Observable<ProductsResponse> {
-    return this.http.get<ProductsResponse>(this.apiUrl);
+  /**
+   * @param limit número de productos por página
+   * @param skip  cuántos productos saltar (paginación de la API)
+   */
+  getProducts(limit = 10, skip = 0): Observable<ProductsResponse> {
+    const params = new HttpParams()
+      .set('limit', limit)
+      .set('skip', skip);
+
+    return this.http.get<ProductsResponse>(this.apiUrl, { params });
   }
 }

@@ -47,6 +47,8 @@
             <th>Precio</th>
             <th>Valoración</th>
             <th>Stock</th>
+            <th>Dimensiones (ancho x alto)</th>
+            <th>Stock valorado</th>
           </tr>
         </thead>
         <tbody>
@@ -64,10 +66,38 @@
               <td>{{ product.price | currency: 'EUR' }}</td>
               <td>⭐ {{ product.rating }}</td>
               <td>{{ product.stock }}</td>
+              <td>
+                {{ product.dimensions.width }} x {{ product.dimensions.height }}
+              </td>
+              <td>{{ valorStock(product) | currency: 'EUR' }}</td>
             </tr>
           }
         </tbody>
       </table>
     </div>
+
+    <div class="paginacion">
+      <ion-button
+        fill="outline"
+        [disabled]="page() === 1"
+        (click)="paginaAnterior()"
+      >
+        Anterior
+      </ion-button>
+
+      <span>Página {{ page() }} de {{ totalPaginas }}</span>
+
+      <ion-button
+        fill="outline"
+        [disabled]="page() === totalPaginas"
+        (click)="paginaSiguiente()"
+      >
+        Siguiente
+      </ion-button>
+    </div>
+
+    <ion-button routerLink="/inicio" expand="block" class="volver">
+      Volver a inicio
+    </ion-button>
   }
 </ion-content>
