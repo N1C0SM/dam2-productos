@@ -33,5 +33,5 @@
  */
 
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
-/* @import "@ionic/angular/css/palettes/dark.class.css"; */
-@import '@ionic/angular/css/palettes/dark.system.css';
+/* Modo oscuro manual: el botón pone la clase .dark en <html> */
+@import '@ionic/angular/css/palettes/dark.class.css';

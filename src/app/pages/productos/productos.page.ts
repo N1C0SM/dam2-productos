@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import {
@@ -14,10 +14,16 @@ import {
   IonCardTitle,
   IonCardContent,
   IonButton,
+  IonSegment,
+  IonSegmentButton,
+  IonLabel,
+  IonFooter,
 } from '@ionic/angular';
 
 import { Product, ProductsResponse, valorStock } from '../../models/product.model';
 import { ProductService } from '../../services/product.service';
+import { ProductoCardComponent } from '../../components/producto-card/producto-card.component';
+import { ThemeToggleComponent } from '../../components/theme-toggle/theme-toggle.component';
 
 const PRODUCTOS_POR_PAGINA = 10;
 
@@ -29,6 +35,8 @@ const PRODUCTOS_POR_PAGINA = 10;
   imports: [
     CurrencyPipe,
     RouterLink,
+    ProductoCardComponent,
+    ThemeToggleComponent,
     IonHeader,
     IonToolbar,
     IonTitle,
@@ -41,6 +49,10 @@ const PRODUCTOS_POR_PAGINA = 10;
     IonCardTitle,
     IonCardContent,
     IonButton,
+    IonSegment,
+    IonSegmentButton,
+    IonLabel,
+    IonFooter,
   ],
 })
 export class ProductosPage implements OnInit {
@@ -54,10 +66,26 @@ export class ProductosPage implements OnInit {
   error = signal('');
   page = signal(1);
 
+  /** Cómo se muestran los productos: en tabla o en tarjetas (dashboard). */
+  vista = signal<'tarjetas' | 'tabla'>('tabla');
+
   readonly pageSize = PRODUCTOS_POR_PAGINA;
 
-  /** Función pura del modelo, expuesta para usarla en la plantilla. */
+  /** Función pura del modelo, expuesta para la tabla. */
   valorStock = valorStock;
+
+  /** Datos del resumen de arriba del dashboard. */
+  valorInventario = computed(() =>
+    this.products().reduce((suma, p) => suma + valorStock(p), 0),
+  );
+
+  valoracionMedia = computed(() => {
+    const lista = this.products();
+    if (lista.length === 0) {
+      return 0;
+    }
+    return lista.reduce((suma, p) => suma + p.rating, 0) / lista.length;
+  });
 
   get totalPaginas(): number {
     return Math.max(1, Math.ceil(this.total() / this.pageSize));
@@ -85,6 +113,10 @@ export class ProductosPage implements OnInit {
         this.loading.set(false);
       },
     });
+  }
+
+  cambiarVista(vista: string): void {
+    this.vista.set(vista === 'tabla' ? 'tabla' : 'tarjetas');
   }
 
   paginaAnterior(): void {

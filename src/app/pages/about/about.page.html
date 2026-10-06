@@ -4,30 +4,28 @@
       <ion-back-button defaultHref="/inicio"></ion-back-button>
     </ion-buttons>
     <ion-title>About</ion-title>
+    <ion-buttons slot="end">
+      <app-theme-toggle></app-theme-toggle>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <h1>{{ empresa }}</h1>
+  <h1>Sobre este proyecto</h1>
 
   <p>
-    {{ empresa }} es una empresa dedicada al desarrollo de interfaces web y
-    aplicaciones móviles. Nacimos como proyecto de aula del ciclo DAM2 y hoy
-    trabajamos en productos digitales centrados en el usuario.
+    Este catálogo de productos lo he desarrollado para la actividad de Ionic + Angular
+    Standalone del módulo de Desarrollo de Interfaces (DAM2). Consume la API pública
+    <strong>https://dummyjson.com/products</strong> y muestra los productos en tarjetas,
+    con su precio, dimensiones y stock valorado.
   </p>
 
   <p>
-    Nuestro equipo diseña aplicaciones híbridas con Ionic y Angular, consume
-    APIs REST y publica cada versión con integración continua en Vercel. Nos
-    obsesionan tres cosas: que la interfaz sea clara, que el código esté
-    separado por capas y que el despliegue no dependa de nadie.
+    Está hecho con Ionic 9 y Angular 22 en modo Standalone (sin <code>app.module.ts</code>),
+    y desplegado en Vercel con despliegue automático desde GitHub.
   </p>
 
-  <h2>Proyecto</h2>
-  <p>
-    Este catálogo consume <strong>https://dummyjson.com/products</strong> y
-    muestra los productos con su precio, dimensiones y stock valorado.
-  </p>
+  <h2>Enlaces</h2>
 
   <ion-button [attr.href]="github" target="_blank" rel="noopener">
     Ver perfil de GitHub

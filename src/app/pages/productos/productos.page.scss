@@ -3,6 +3,46 @@
   padding: 40px;
 }
 
+/* Resumen tipo dashboard */
+.resumen {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.resumen ion-card {
+  margin: 0;
+}
+
+.resumen ion-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.resumen .etiqueta {
+  font-size: 13px;
+  color: var(--ion-color-medium);
+}
+
+.resumen strong {
+  font-size: 22px;
+  color: var(--ion-color-primary);
+}
+
+.selector {
+  margin-bottom: 16px;
+}
+
+/* Rejilla de tarjetas */
+.tarjetas {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 16px;
+}
+
+/* Vista de tabla */
 .table-container {
   width: 100%;
   overflow-x: auto;
@@ -17,7 +57,7 @@ table {
 th,
 td {
   padding: 12px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.35);
   text-align: left;
 }
 
@@ -43,7 +83,7 @@ th {
   align-items: center;
   justify-content: center;
   gap: 16px;
-  margin-top: 24px;
+  padding: 4px 0;
 }
 
 .volver {
